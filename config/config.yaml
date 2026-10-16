@@ -1,0 +1,66 @@
+# ============================================================
+# bulk RNA-seq 最小工作流 —— 全局配置
+# ------------------------------------------------------------
+# 范围：bulk RNA-seq（CASE vs CTRL），双端、Illumina、plant reference
+# 依据：RNA-seq实际使用脚本/上游分析流程.docx（STAR + featureCounts + DESeq2）
+# 规则：路径/参数集中在此，规则内不硬编码；版本固定，禁止 latest
+# ============================================================
+
+# 样本表（制表符分隔）
+samples: "config/samples.tsv"
+
+# ---------------- 参考基因组（请提供相互匹配的版本） ----------------
+reference:
+  fasta: "resources/reference/reference.fa"
+  gff: "resources/reference/reference.gff3"
+  gtf: "resources/reference/reference.gtf"      # 由 gffread 从 gff 生成（gff2gtf 规则）
+  star_index: "resources/reference/star_index"               # STAR 索引目录（star_index 规则生成）
+
+# ---------------- 软件版本（固定） ----------------
+versions:
+  star: "2.7.11b"       # TODO 待确认：原脚本 conda install STAR 未固定版本
+  gffread: "0.12.7"
+  subread: "2.0.6"      # 提供 featureCounts
+  r-base: "4.3.1"       # 下游 DESeq2（可选）
+
+# ---------------- 线程（每类任务） ----------------
+threads:
+  star_index: 30
+  star_align: 30
+  featurecounts: 30
+  gff2gtf: 1
+
+# ---------------- 内存（MB） ----------------
+mem_mb:
+  star_index: 32000
+  star_align: 32000
+  featurecounts: 8000
+  gff2gtf: 2000
+
+# ---------------- STAR 索引参数（拆成顶层键，便于玩具数据用 --config 覆盖 nbases） ----------------
+# sjdbOverhang = 读长 - 1（真实读长 150 → 149）
+# genomeSAindexNbases = 12 适合约 135Mb 基因组；小基因组（玩具数据）需调小（如 8）
+star_sjdb_overhang: 149
+star_genome_sa_index_nbases: 12
+
+# ---------------- STAR 比对参数 ----------------
+star:
+  # 原脚本为 Unsorted；此重构版改为 SortedByCoordinate。
+  # quantMode GeneCounts 会额外输出 ReadsPerGene.out.tab（与 featureCounts 互为校验）
+  align_extra: "--quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --outSAMtype BAM SortedByCoordinate --outSAMunmapped None"
+
+# ---------------- featureCounts 参数 ----------------
+featurecounts:
+  # 原脚本为 -t transcript；重构版改为按 exon 聚合至 gene_id，并按双端 fragment 计数。
+  extra: "-t exon -g gene_id -p --countReadPairs"
+
+# ---------------- DESeq2（可选下游，不在 rule all 内） ----------------
+deseq2:
+  design: "~ condition"
+  contrast: ["CASE", "CTRL"]     # 分子 vs 分母
+
+# ---------------- 输出目录 ----------------
+outdirs:
+  star: "results/star"
+  counts: "results/counts"
+  deseq2: "results/deseq2"

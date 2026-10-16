@@ -1,4 +1,17 @@
 demo-output/
+tests/toy/
+results/
+logs/
+benchmark/
+.snakemake/
+__pycache__/
+*.pyc
+resources/
+*.fa
+*.fasta
+*.gff3
+*.gtf
+*.sam
 .Rhistory
 .RData
 *.fastq

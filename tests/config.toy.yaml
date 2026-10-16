@@ -1,0 +1,34 @@
+samples: tests/samples.toy.tsv
+reference:
+  fasta: tests/toy/genome.fa
+  gff: tests/toy/genome.gff3
+  gtf: tests/toy/genome.gtf
+  star_index: tests/toy/star_index
+versions:
+  star: 2.7.11b
+  gffread: 0.12.7
+  subread: 2.0.6
+  r-base: 4.3.1
+threads:
+  star_index: 2
+  star_align: 2
+  featurecounts: 2
+  gff2gtf: 1
+mem_mb:
+  star_index: 4000
+  star_align: 4000
+  featurecounts: 2000
+  gff2gtf: 1000
+star_sjdb_overhang: 149
+star_genome_sa_index_nbases: 8
+star:
+  align_extra: "--quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --outSAMtype BAM SortedByCoordinate --outSAMunmapped None"
+featurecounts:
+  extra: "-t exon -g gene_id -p --countReadPairs"
+deseq2:
+  design: "~ condition"
+  contrast: [CASE, CTRL]
+outdirs:
+  star: tests/toy/results/star
+  counts: tests/toy/results/counts
+  deseq2: tests/toy/results/deseq2

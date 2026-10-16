@@ -1,0 +1,23 @@
+# bulk RNA-seq 工作流 conda 环境
+# 用法：conda env create -f envs/rnaseq.yaml && conda activate rnaseq
+# 说明：
+#   - star/gffread/subread 版本与 config 的 versions 一致（固定，不用 latest）
+#   - r-base/bioconductor-deseq2/r-ggplot2 为下游可选（deseq2 规则）
+#   - 若某精确版本在 bioconda 不可得，请在 config 与本文中同步调整
+name: rnaseq
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python>=3.9
+  - pandas
+  - pyyaml
+  - snakemake-minimal
+  - star=2.7.11b
+  - gffread=0.12.7
+  - subread=2.0.6
+  # 下游可选（deseq2 规则）
+  - r-base=4.3.1
+  - bioconductor-deseq2
+  - r-ggplot2

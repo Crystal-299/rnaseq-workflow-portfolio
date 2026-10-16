@@ -1,0 +1,7 @@
+sample	condition	replicate	R1	R2
+CASE_rep1	CASE	1	resources/raw/CASE_rep1_R1.fastq.gz	resources/raw/CASE_rep1_R2.fastq.gz
+CASE_rep2	CASE	2	resources/raw/CASE_rep2_R1.fastq.gz	resources/raw/CASE_rep2_R2.fastq.gz
+CASE_rep3	CASE	3	resources/raw/CASE_rep3_R1.fastq.gz	resources/raw/CASE_rep3_R2.fastq.gz
+CTRL_rep1	CTRL	1	resources/raw/CTRL_rep1_R1.fastq.gz	resources/raw/CTRL_rep1_R2.fastq.gz
+CTRL_rep2	CTRL	2	resources/raw/CTRL_rep2_R1.fastq.gz	resources/raw/CTRL_rep2_R2.fastq.gz
+CTRL_rep3	CTRL	3	resources/raw/CTRL_rep3_R1.fastq.gz	resources/raw/CTRL_rep3_R2.fastq.gz
